@@ -7,7 +7,7 @@ The purpose of this project is to get cost usage data from AWS costexplorer api 
 How to run:
 ------------
 
-Configure AWS credentials, SES_SEND, SES_REGION, SES_FROM:
+Configure AWS credentials using aws cli:
     
     aws configure 
     
