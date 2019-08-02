@@ -19,21 +19,22 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.utils import COMMASPACE, formatdate
 
+
+
 # Global Variables
 if os.environ.get('SES_SEND'):
     SES_SEND = os.environ.get('SES_SEND')
     SES_REGION = os.environ.get('SES_REGION')
     SES_FROM = os.environ.get('SES_FROM')
+
 else:
+
     print("SES Variables are required to set in Environments")
     sys.exit()
 
-print(SES_SEND)
-print(SES_REGION)
-print(SES_FROM)
-
 
 class CostExplorer:
+
 
     def __init__(self, CurrentMonth=False):
         # Array of reports ready to be output to Excel.
@@ -63,8 +64,10 @@ class CostExplorer:
             logging.info("Getting Account names failed")
             self.accounts = {}
 
+
     def setStart(self, interval):
         self.start = (datetime.date.today() - relativedelta(months=+interval)).replace(day=1)
+
 
     def getAccounts(self):
         accounts = {}
@@ -156,6 +159,7 @@ class CostExplorer:
         df = df.sort_values(sort, ascending=False)
         self.reports.append({'Name': Name, 'Data': df, 'Type': type})
 
+
     def generateExcel(self):
         # Create a Pandas Excel writer using XlsxWriter as the engine.
         # os.chdir('/tmp')
@@ -181,6 +185,7 @@ class CostExplorer:
                 chart.set_x_axis({'label_position': 'low'})
                 worksheet.insert_chart('O2', chart, {'x_scale': 2.0, 'y_scale': 2.0})
         writer.save()
+
 
     def sendEmail(self):
         ## send email with result xls file
@@ -209,6 +214,7 @@ class CostExplorer:
             )
             print("Successfully sent email to %s" % (SES_SEND))
 
+
 def main():
     costexplorer = CostExplorer(CurrentMonth=True)
     costexplorer.setStart(args.months)
@@ -224,6 +230,7 @@ def main():
     # Send email
     costexplorer.sendEmail()
     return "Report Generated"
+
 
 if __name__ == '__main__':
     main()
