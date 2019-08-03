@@ -26,15 +26,12 @@ if os.environ.get('SES_SEND'):
     SES_SEND = os.environ.get('SES_SEND')
     SES_REGION = os.environ.get('SES_REGION')
     SES_FROM = os.environ.get('SES_FROM')
-
 else:
-
     print("SES Variables are required to set in Environments")
     sys.exit()
 
 
 class CostExplorer:
-
 
     def __init__(self, CurrentMonth=False):
         # Array of reports ready to be output to Excel.
@@ -64,10 +61,8 @@ class CostExplorer:
             logging.info("Getting Account names failed")
             self.accounts = {}
 
-
     def setStart(self, interval):
         self.start = (datetime.date.today() - relativedelta(months=+interval)).replace(day=1)
-
 
     def getAccounts(self):
         accounts = {}
@@ -78,7 +73,6 @@ class CostExplorer:
             for acc in response['Accounts']:
                 accounts[acc['Id']] = acc
         return accounts
-
 
     def addReport(self, Name="Default", GroupBy=[{"Type": "DIMENSION", "Key": "SERVICE"}, ],
                   Style='Total', NoCredits=True, CreditsOnly=False, RefundOnly=False, UpfrontOnly=False,
@@ -159,7 +153,6 @@ class CostExplorer:
         df = df.sort_values(sort, ascending=False)
         self.reports.append({'Name': Name, 'Data': df, 'Type': type})
 
-
     def generateExcel(self):
         # Create a Pandas Excel writer using XlsxWriter as the engine.
         # os.chdir('/tmp')
@@ -185,7 +178,6 @@ class CostExplorer:
                 chart.set_x_axis({'label_position': 'low'})
                 worksheet.insert_chart('O2', chart, {'x_scale': 2.0, 'y_scale': 2.0})
         writer.save()
-
 
     def sendEmail(self):
         ## send email with result xls file
@@ -213,7 +205,6 @@ class CostExplorer:
                 RawMessage={'Data': msg.as_string()}
             )
             print("Successfully sent email to %s" % (SES_SEND))
-
 
 def main():
     costexplorer = CostExplorer(CurrentMonth=True)
